@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compile 'org.ow2.asm:asm-commons:7.1'
+}
+
+repositories {
+    jcenter()
+}
