@@ -80,8 +80,7 @@ public class ClassMapping {
                     entry.getKey().getName());
         }
         for (Map.Entry<Method, String> entry : methods.entrySet()) {
-            reversed.methods.put(new Method(entry.getValue(), entry.getKey().getArgumentTypes(),
-                    entry.getKey().getReturnType()), entry.getKey().getName());
+            reversed.methods.put(new Method(entry.getValue(), entry.getKey().getDescriptor()), entry.getKey().getName());
         }
         return reversed;
     }

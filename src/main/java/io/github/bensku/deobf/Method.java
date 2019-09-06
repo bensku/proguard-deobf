@@ -11,36 +11,26 @@ public class Method {
     private final String name;
 
     /**
-     * Types of method arguments.
+     * Method descriptor.
      */
-    private final List<String> argumentTypes;
-    
-    /**
-     * Return type of method.
-     */
-    private final String returnType;
+    private final String descriptor;
 
-    public Method(String name, List<String> argumentTypes, String returnType) {
+    public Method(String name, String descriptor) {
         this.name = name;
-        this.argumentTypes = argumentTypes;
-        this.returnType = returnType;
+        this.descriptor = descriptor;
     }
     
     public String getName() {
         return name;
     }
 
-    public List<String> getArgumentTypes() {
-        return argumentTypes;
-    }
-
-    public String getReturnType() {
-        return returnType;
+    public String getDescriptor() {
+        return descriptor;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(argumentTypes, name, returnType);
+        return Objects.hash(descriptor, name);
     }
 
     @Override
@@ -52,7 +42,7 @@ public class Method {
         if (getClass() != obj.getClass())
             return false;
         Method other = (Method) obj;
-        return Objects.equals(argumentTypes, other.argumentTypes) && Objects.equals(name, other.name)
-                && Objects.equals(returnType, other.returnType);
+        return Objects.equals(descriptor, other.descriptor) && Objects.equals(name, other.name);
     }
+    
 }
