@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.github.bensku.deobf.ClassMapping;
+import io.github.bensku.deobf.Field;
 import io.github.bensku.deobf.Mappings;
 
 public class ProguardLoader implements MappingsLoader {
@@ -15,6 +16,9 @@ public class ProguardLoader implements MappingsLoader {
         String currentSource = null;
         ClassMapping.Builder current = null;
         for (String line : data.split("\n")) {
+            if (line.startsWith("#")) {
+                continue; // Comment line, ignore it
+            }
             String[] split = splitLine(line);
             if (!line.startsWith("    ")) { // Begin class mapping
                 if (currentSource != null) { // If not first, add build class mapping
@@ -25,7 +29,14 @@ public class ProguardLoader implements MappingsLoader {
                 currentSource = split[0];
                 current = new ClassMapping.Builder(split[1].substring(0, split[1].length() - 1));
             } else { // Field/method mapping info
-                
+                int firstColon = split[0].indexOf(':');
+                if (firstColon != -1) { // Method mapping
+                    // TODO
+                } else { // Field mapping
+                    String[] from = split[0].split(" "); // Ignore type
+                    String to = split[1];
+                    current.field(new Field(from[1], DescriptorGenerator.getTypeDescriptor(from[0])), to);
+                }
             }
         }
         return null;
