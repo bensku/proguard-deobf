@@ -8,6 +8,10 @@ import java.util.Map;
  *
  */
 public class ClassMapping {
+    
+    public static ClassMapping notMapped(String name) {
+        return new ClassMapping(name);
+    }
 
     public static class Builder {
 
@@ -75,20 +79,28 @@ public class ClassMapping {
 
     /**
      * Reverses this class mapping.
+     * @param original Original mappings.
      * @param fromName Name this mapping maps from.
      * @return Reversed mapping.
      */
-    public ClassMapping reversed(String fromName) {
+    public ClassMapping reversed(Mappings original, String fromName) {
         // Create new mapping with name this was mapped from
         ClassMapping reversed = new ClassMapping(fromName);
         
         // Reverse field and method mappings
         for (Map.Entry<Field, String> entry : fields.entrySet()) {
-            reversed.fields.put(new Field(entry.getValue(), entry.getKey().getType()),
+            String newFrom = original.map(entry.getKey().getType()).getName();
+            reversed.fields.put(new Field(entry.getValue(), newFrom),
                     entry.getKey().getName());
         }
         for (Map.Entry<Method, String> entry : methods.entrySet()) {
-            reversed.methods.put(new Method(entry.getValue(), entry.getKey().getDescriptor()), entry.getKey().getName());
+            String[] oldParams = entry.getKey().getParameters();
+            String[] newParams = new String[oldParams.length];
+            for (int i = 0; i < newParams.length; i++) {
+                newParams[i] = original.map(oldParams[i]).getName();
+            }
+            String newReturn = original.map(entry.getKey().getReturnType()).getName();
+            reversed.methods.put(new Method(entry.getValue(), newParams, newReturn), entry.getKey().getName());
         }
         return reversed;
     }

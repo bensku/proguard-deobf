@@ -14,9 +14,18 @@ public class Field {
      */
     private final String type;
     
+    private final String descriptor;
+    
     public Field(String name, String type) {
         this.name = name;
         this.type = type;
+        this.descriptor = DescriptorGenerator.getTypeDescriptor(type);
+    }
+    
+    public Field(String name, String type, String descriptor) {
+        this.name = name;
+        this.type = type;
+        this.descriptor = descriptor;
     }
 
     public String getName() {
@@ -27,9 +36,13 @@ public class Field {
         return type;
     }
 
+    public String getDescriptor() {
+        return descriptor;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(name, type);
+        return Objects.hash(descriptor, name);
     }
 
     @Override
@@ -41,7 +54,7 @@ public class Field {
         if (getClass() != obj.getClass())
             return false;
         Field other = (Field) obj;
-        return Objects.equals(name, other.name) && Objects.equals(type, other.type);
+        return Objects.equals(descriptor, other.descriptor) && Objects.equals(name, other.name);
     }
     
 }

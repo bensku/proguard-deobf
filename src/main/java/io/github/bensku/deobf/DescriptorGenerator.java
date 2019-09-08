@@ -1,4 +1,4 @@
-package io.github.bensku.deobf.loader;
+package io.github.bensku.deobf;
 
 /**
  * Generates type descriptors from type names.

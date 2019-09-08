@@ -16,7 +16,7 @@ public class Mappings {
     }
     
     public ClassMapping map(String name) {
-        return classes.get(name);
+        return classes.getOrDefault(name, ClassMapping.notMapped(name));
     }
     
     public Map<String, ClassMapping> getClasses() {
@@ -30,7 +30,7 @@ public class Mappings {
     public Mappings reversed() {
         Map<String, ClassMapping> reversed = new HashMap<>();
         for (Map.Entry<String, ClassMapping> entry : classes.entrySet()) {
-            reversed.put(entry.getValue().getName(), entry.getValue().reversed(entry.getKey()));
+            reversed.put(entry.getValue().getName(), entry.getValue().reversed(this, entry.getKey()));
         }
         return new Mappings(reversed);
     }

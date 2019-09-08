@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.github.bensku.deobf.ClassMapping;
+import io.github.bensku.deobf.DescriptorGenerator;
 import io.github.bensku.deobf.Field;
 import io.github.bensku.deobf.Mappings;
 import io.github.bensku.deobf.Method;
@@ -49,11 +50,11 @@ public class ProguardLoader implements MappingsLoader {
                     }
                     
                     String[] params = from[1].substring(bracket + 1, from[1].indexOf(')', bracket)).split(",");
-                    current.method(new Method(fromName, DescriptorGenerator.getMethodDescriptor(params, returnType)), to);
+                    current.method(new Method(fromName, params, returnType), to);
                 } else { // Field mapping
                     String[] from = split[0].split(" "); // Ignore type
                     String to = split[1];
-                    current.field(new Field(from[1], DescriptorGenerator.getTypeDescriptor(from[0])), to);
+                    current.field(new Field(from[1], from[0]), to);
                 }
             }
         }

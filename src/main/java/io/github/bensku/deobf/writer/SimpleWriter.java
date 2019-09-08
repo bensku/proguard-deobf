@@ -25,8 +25,10 @@ public class SimpleWriter implements MappingsWriter {
                         .append(field.getValue()).append('\n');
             }
             for (Map.Entry<Method, String> field : entry.getValue().getMethods().entrySet()) {
-                sb.append("FIELD ").append(field.getKey().getName()).append(' ')
-                        .append(field.getKey().getDescriptor()).append(' ')
+                String params = String.join(",", field.getKey().getParameters());
+                sb.append("METHOD ").append(field.getKey().getName()).append(' ')
+                        .append(params.isBlank() ? "no-args" : params).append(' ')
+                        .append(field.getKey().getReturnType()).append(' ')
                         .append(field.getValue()).append('\n');
             }
         }

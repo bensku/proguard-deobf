@@ -19,17 +19,17 @@ public class DeobfRemapper extends Remapper {
     }
     
     public String mapMethodName(String owner, String name, String descriptor) {
-        ClassMapping map = maps.map(owner);
-        return map.mapMethod(new Method(name, descriptor));
+        ClassMapping map = maps.map(owner.replace('/', '.'));
+        return map.mapMethod(new Method(name, null, null, descriptor));
     }
     
     public String mapFieldName(String owner, String name, String descriptor) {
-        ClassMapping map = maps.map(owner);
-        return map.mapField(new Field(name, descriptor));
+        ClassMapping map = maps.map(owner.replace('/', '.'));
+        return map.mapField(new Field(name, null, descriptor));
     }
 
     public String map(String internalName) {
         // Internal name: fully qualified name, but with slashes instead of dots
-        return maps.map(internalName).getName();
+        return maps.map(internalName.replace('/', '.')).getName();
     }
 }
