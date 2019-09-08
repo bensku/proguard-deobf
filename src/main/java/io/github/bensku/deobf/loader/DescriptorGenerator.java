@@ -26,6 +26,8 @@ public class DescriptorGenerator {
             return "Z";
         case "void": // Only return type
             return "V";
+        case "":
+            return "";
         default:
             return "L" + type.replace('.', '/') + ";";
         }

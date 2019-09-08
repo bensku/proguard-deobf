@@ -56,7 +56,7 @@ public class ProguardLoader implements MappingsLoader {
                 }
             }
         }
-        return null;
+        return new Mappings(maps);
     }
 
     private String[] splitLine(String line) {
