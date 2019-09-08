@@ -1,9 +1,11 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
 }
 
 dependencies {
     compile 'org.ow2.asm:asm-commons:7.1'
+    compile 'com.beust:jcommander:1.71'
 }
 
 repositories {

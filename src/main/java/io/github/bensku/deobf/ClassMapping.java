@@ -61,8 +61,16 @@ public class ClassMapping {
         return fields.get(field);
     }
     
+    public Map<Field, String> getFields() {
+        return fields;
+    }
+    
     public String mapMethod(Method method) {
         return methods.get(method);
+    }
+    
+    public Map<Method, String> getMethods() {
+        return methods;
     }
 
     /**

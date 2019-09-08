@@ -19,6 +19,10 @@ public class Mappings {
         return classes.get(name);
     }
     
+    public Map<String, ClassMapping> getClasses() {
+        return classes;
+    }
+    
     /**
      * Reverses these mappings.
      * @return Reversed mappings.
