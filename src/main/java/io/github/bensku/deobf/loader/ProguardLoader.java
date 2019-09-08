@@ -43,7 +43,8 @@ public class ProguardLoader implements MappingsLoader {
                     String returnType = from[0];
                     int bracket = from[1].indexOf('(');
                     String fromName = from[1].substring(0, bracket);
-                    if (fromName.equals("<init>")) { // Constructor not renamapped, ignore
+                    if (fromName.equals("<init>") || fromName.equals("<clinit>")) {
+                        // Constructors and static initializers are never changed; ignore them
                         continue;
                     }
                     
