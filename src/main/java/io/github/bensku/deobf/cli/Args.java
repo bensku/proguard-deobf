@@ -27,5 +27,11 @@ class Args {
      */
     @Parameter(names = {"--reverse", "-r"})
     public boolean reverse;
+    
+    @Parameter(names = {"--jarIn", "-j"})
+    public String jarIn;
+    
+    @Parameter(names = {"--jarOut", "-o"})
+    public String jarOut;
 
 }

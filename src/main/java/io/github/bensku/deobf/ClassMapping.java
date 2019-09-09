@@ -62,7 +62,7 @@ public class ClassMapping {
     }
     
     public String mapField(Field field) {
-        return fields.get(field);
+        return fields.getOrDefault(field, field.getName());
     }
     
     public Map<Field, String> getFields() {
@@ -70,7 +70,7 @@ public class ClassMapping {
     }
     
     public String mapMethod(Method method) {
-        return methods.get(method);
+        return methods.getOrDefault(method, method.getName());
     }
     
     public Map<Method, String> getMethods() {

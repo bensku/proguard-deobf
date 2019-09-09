@@ -1,13 +1,18 @@
 package io.github.bensku.deobf.cli;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 
 import com.beust.jcommander.JCommander;
 
 import io.github.bensku.deobf.Mappings;
+import io.github.bensku.deobf.asm.DeobfRemapper;
+import io.github.bensku.deobf.asm.JarRemapper;
 import io.github.bensku.deobf.loader.MappingsLoader;
 import io.github.bensku.deobf.loader.ProguardLoader;
 import io.github.bensku.deobf.writer.MappingsWriter;
@@ -44,6 +49,15 @@ public class DeobfCli {
         if (args.mappingsOut != null) {
             MappingsWriter writer = MappingTypes.getWriter(args.outFormat);
             Files.writeString(Paths.get(args.mappingsOut), writer.write(maps));
+        }
+        
+        // Remap jar if it was provided
+        if (args.jarIn != null) {
+            DeobfRemapper mapper = new DeobfRemapper(maps);
+            try (JarFile jar = new JarFile(args.jarIn);
+                    JarOutputStream out = new JarOutputStream(new FileOutputStream(args.jarOut))) {
+                JarRemapper.remap(mapper, jar, out);
+            }
         }
     }
 }

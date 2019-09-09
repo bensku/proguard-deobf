@@ -30,6 +30,7 @@ public class DeobfRemapper extends Remapper {
 
     public String map(String internalName) {
         // Internal name: fully qualified name, but with slashes instead of dots
-        return maps.map(internalName.replace('/', '.')).getName();
+        return maps.map(internalName.replace('/', '.')).getName()
+                .replace('.', '/');
     }
 }
