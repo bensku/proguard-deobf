@@ -1,11 +1,10 @@
 package io.github.bensku.deobf.asm;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -39,6 +38,13 @@ public class JarRemapper {
                    to.write(writer.toByteArray());
                }
            }
+        }
+    }
+    
+    public static void remap(DeobfRemapper mapper, Path from, Path to) throws IOException {
+        try (JarFile jar = new JarFile(from.toFile());
+                JarOutputStream out = new JarOutputStream(new FileOutputStream(to.toFile()))) {
+            remap(mapper, jar, out);
         }
     }
 }
