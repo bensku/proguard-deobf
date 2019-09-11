@@ -19,9 +19,23 @@ public class JarRemapper {
     public static void remap(DeobfRemapper mapper, JarFile from, JarOutputStream to) throws IOException {
         for (Enumeration<JarEntry> entries = from.entries(); entries.hasMoreElements();) {
            JarEntry next = entries.nextElement();
-           if (!next.isDirectory() && next.getName().endsWith(".class")
-                   && !next.getName().contains("/")) { // Ignore non-obfuscated classes
+           if (!next.isDirectory()) {
                try (InputStream is = from.getInputStream(next)) {
+                   if (!next.getName().endsWith(".class")) { // Not a class, copy as-is
+                       ByteArrayOutputStream originFile = new ByteArrayOutputStream();
+                       int readed;
+                       byte[] data = new byte[16384];
+                       while ((readed = is.read(data, 0, data.length)) != -1) {
+                         originFile.write(data, 0, readed);
+                       }
+                       
+                       to.putNextEntry(new JarEntry(next.getName()));
+                       to.write(originFile.toByteArray());
+                       continue;
+                   }
+                   if (next.getName().contains("/")) { // Not obfuscated class, ignore
+                       continue;
+                   }
                    ByteArrayOutputStream originClass = new ByteArrayOutputStream();
                    int readed;
                    byte[] data = new byte[16384];
