@@ -35,10 +35,15 @@ public class ProguardLoader implements MappingsLoader {
                 currentSource = split[0];
                 current = new ClassMapping.Builder(split[1].substring(0, split[1].length() - 1));
             } else { // Field/method mapping info
-                int firstColon = split[0].indexOf(':');
-                if (firstColon != -1) { // Method mapping
-                    int secondColon = split[0].indexOf(':', firstColon + 1);
-                    String[] from = split[0].substring(secondColon + 1).split(" ");
+                if (split[0].contains("(")) { // Method mapping
+                    int firstColon = split[0].indexOf(':');
+                    String[] from;
+                    if (firstColon != -1) { // Start and end line in input; ignore for now
+                        int secondColon = split[0].indexOf(':', firstColon + 1);
+                        from = split[0].substring(secondColon + 1).split(" ");
+                    } else {
+                        from = split[0].split(" ");
+                    }
                     String to = split[1];
                     
                     String returnType = from[0];
