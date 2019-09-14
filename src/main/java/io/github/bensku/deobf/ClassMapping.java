@@ -62,7 +62,7 @@ public class ClassMapping {
     }
     
     public String mapField(Field field) {
-        return fields.getOrDefault(field, field.getName());
+        return fields.get(field);
     }
     
     public Map<Field, String> getFields() {
@@ -70,7 +70,7 @@ public class ClassMapping {
     }
     
     public String mapMethod(Method method) {
-        return methods.getOrDefault(method, method.getName());
+        return methods.get(method);
     }
     
     public Map<Method, String> getMethods() {
@@ -89,7 +89,7 @@ public class ClassMapping {
         
         // Reverse field and method mappings
         for (Map.Entry<Field, String> entry : fields.entrySet()) {
-            String newFrom = original.map(entry.getKey().getType()).getName();
+            String newFrom = original.mapType(entry.getKey().getType());
             reversed.fields.put(new Field(entry.getValue(), newFrom),
                     entry.getKey().getName());
         }
@@ -97,12 +97,12 @@ public class ClassMapping {
             String[] oldParams = entry.getKey().getParameters();
             String[] newParams = new String[oldParams.length];
             for (int i = 0; i < newParams.length; i++) {
-                newParams[i] = original.map(oldParams[i]).getName();
+                newParams[i] = original.mapType(oldParams[i]);
             }
-            String newReturn = original.map(entry.getKey().getReturnType()).getName();
+            String newReturn = original.mapType(entry.getKey().getReturnType());
             reversed.methods.put(new Method(entry.getValue(), newParams, newReturn), entry.getKey().getName());
         }
         return reversed;
     }
-
+    
 }

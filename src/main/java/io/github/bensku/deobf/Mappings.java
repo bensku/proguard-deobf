@@ -16,7 +16,26 @@ public class Mappings {
     }
     
     public ClassMapping map(String name) {
+        int arrayStart = name.indexOf('[');
+        if (arrayStart != -1) {
+            name = name.substring(0, arrayStart);
+        }
         return classes.getOrDefault(name, ClassMapping.notMapped(name));
+    }
+    
+    public String mapType(String name) {
+        int arrayStart = name.indexOf('[');
+        String baseName;
+        String arrayPart;
+        if (arrayStart != -1) {
+            baseName = name.substring(0, arrayStart);
+            arrayPart = name.substring(arrayStart);
+        } else {
+            baseName = name;
+            arrayPart = "";
+        }
+        
+        return classes.getOrDefault(baseName, ClassMapping.notMapped(baseName)).getName() + arrayPart;
     }
     
     public Map<String, ClassMapping> getClasses() {

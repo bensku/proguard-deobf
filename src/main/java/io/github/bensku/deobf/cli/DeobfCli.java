@@ -53,11 +53,7 @@ public class DeobfCli {
         
         // Remap jar if it was provided
         if (args.jarIn != null) {
-            DeobfRemapper mapper = new DeobfRemapper(maps);
-            try (JarFile jar = new JarFile(args.jarIn);
-                    JarOutputStream out = new JarOutputStream(new FileOutputStream(args.jarOut))) {
-                JarRemapper.remap(mapper, jar, out);
-            }
+            JarRemapper.remap(maps, Paths.get(args.jarIn), Paths.get(args.jarOut), path -> path.getNameCount() == 1);
         }
     }
 }

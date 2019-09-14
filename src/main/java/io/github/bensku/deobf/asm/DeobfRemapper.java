@@ -1,5 +1,8 @@
 package io.github.bensku.deobf.asm;
 
+import java.util.List;
+import java.util.Map;
+
 import org.objectweb.asm.commons.Remapper;
 
 import io.github.bensku.deobf.ClassMapping;
@@ -12,20 +15,50 @@ import io.github.bensku.deobf.Method;
  */
 public class DeobfRemapper extends Remapper {
     
-    private Mappings maps;
+    /**
+     * Mappings we use.
+     */
+    private final Mappings maps;
     
-    public DeobfRemapper(Mappings maps) {
+    /**
+     * Classes by their superclasses+superinterfaces.
+     */
+    private final Map<String, List<String>> supers;
+    
+    public DeobfRemapper(Mappings maps, Map<String, List<String>> supers) {
         this.maps = maps;
+        this.supers = supers;
     }
     
     public String mapMethodName(String owner, String name, String descriptor) {
         ClassMapping map = maps.map(owner.replace('/', '.'));
-        return map.mapMethod(new Method(name, null, null, descriptor));
+        String newName = map.mapMethod(new Method(name, null, null, descriptor));
+        if (newName == null) {
+            List<String> parents = supers.get(owner);
+            if (parents == null) {
+                return name; // No supers, can't be reference to them
+            }
+            for (String parent : parents) {
+                return mapMethodName(parent, name, descriptor);
+            }
+        }
+        return newName;
     }
     
     public String mapFieldName(String owner, String name, String descriptor) {
         ClassMapping map = maps.map(owner.replace('/', '.'));
-        return map.mapField(new Field(name, null, descriptor));
+        String newName = map.mapField(new Field(name, null, descriptor));
+        if (newName == null) {
+            List<String> parents = supers.get(owner);
+            if (parents == null) {
+                return name; // No supers, can't be reference to them
+            }
+            for (String parent : parents) {
+                return mapFieldName(parent, name, descriptor);
+            }
+            return name;
+        }
+        return newName;
     }
 
     public String map(String internalName) {

@@ -57,4 +57,8 @@ public class Field {
         return Objects.equals(descriptor, other.descriptor) && Objects.equals(name, other.name);
     }
     
+    @Override
+    public String toString() {
+        return name + "." + descriptor;
+    }
 }
